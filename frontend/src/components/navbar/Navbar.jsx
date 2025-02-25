@@ -23,6 +23,9 @@ function Navbar() {
                 <Link to={'/profile'}>
                     <div className='cursor-pointer'>Profile</div>
                 </Link>
+                <Link to={'/voting'}>
+                    <div className='cursor-pointer'>Vote</div>
+                </Link>
             </div>
         </div>
     )
