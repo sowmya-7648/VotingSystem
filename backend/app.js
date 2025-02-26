@@ -26,9 +26,12 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => console.error("❌ MongoDB connection error:", err));
 
 // Routes
+app.use("/uploads", express.static("uploads"));
+
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes); // Corrected auth route
 app.use('/api/candidates', candidateRoutes);
+
 app.use('/api/votes', voteRoutes);
 app.use('/api/results', resultsRoutes); // Added results route
 

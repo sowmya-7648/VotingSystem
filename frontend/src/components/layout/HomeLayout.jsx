@@ -1,14 +1,16 @@
-import React from 'react'
-import Navbar from '../navbar/Navbar'
-import { Outlet } from 'react-router-dom'
+import React from 'react';
+import Navbar from '../navbar/Navbar';
+import { Outlet } from 'react-router-dom';
 
 function HomeLayout() {
     return (
-        <div>
+        <div className="min-h-screen flex flex-col">
             <Navbar />
-            <Outlet />
+            <div className="flex-grow pt-16"> {/* Ensures space below navbar */}
+                <Outlet />
+            </div>
         </div>
-    )
+    );
 }
 
-export default HomeLayout
+export default HomeLayout;

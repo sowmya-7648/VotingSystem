@@ -12,25 +12,28 @@ function Navbar() {
     };
 
     return (
-        <div className='bg-purple-200 p-2 flex flex-row justify-around w-[95vw]'>
-            <Link to={'/'}>
-                <div className='flex flex-row w-1/2 font-bold text-xl'>VoteWise</div>
+        <div className="w-full flex flex-row justify-between items-center px-8 py-4 bg-white shadow-md">
+            {/* Left Side - Logo */}
+            <Link to="/" className="text-3xl font-bold text-rose-500 hover:text-rose-700">
+                VoteWise
             </Link>
-            <div className='flex flex-row w-1/2 justify-around'>
+
+            {/* Right Side - Navigation Links */}
+            <div className="flex items-center gap-5 text-lg font-medium">
                 {!token ? (
                     <>
-                        <Link to={'/login'}><div className='cursor-pointer'>Login</div></Link>
-                        <Link to={'/signup'}><div className='cursor-pointer'>Signup</div></Link>
+                        <Link to="/login" className="hover:text-rose-700">Login</Link>
+                        <Link to="/signup" className="hover:text-rose-700">Signup</Link>
                     </>
                 ) : (
                     <>
-                        <Link to={'/candidates'}><div className='cursor-pointer'>Candidates</div></Link>
-                        <Link to={'/results'}><div className='cursor-pointer'>Results</div></Link>
-                        <Link to={'/profile'}><div className='cursor-pointer'>Profile</div></Link>
-                        <Link to={'/voting'}><div className='cursor-pointer'>Vote</div></Link>
-                        <div onClick={handleLogout} className='cursor-pointer text-red-500 font-semibold'>
+                        <Link to="/candidates" className="hover:text-rose-700">Candidates</Link>
+                        <Link to="/results" className="hover:text-rose-700">Results</Link>
+                        <Link to="/profile" className="hover:text-rose-700">Profile</Link>
+                        <Link to="/voting" className="hover:text-rose-700">Vote</Link>
+                        <button onClick={handleLogout} className="text-red-600 font-semibold hover:text-red-800">
                             Logout
-                        </div>
+                        </button>
                     </>
                 )}
             </div>

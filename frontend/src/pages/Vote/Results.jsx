@@ -9,7 +9,7 @@ const Results = () => {
     useEffect(() => {
         const fetchResults = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/vote/results", {
+                const response = await axios.get("http://localhost:8080/api/results", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setResults(response.data);
@@ -22,24 +22,42 @@ const Results = () => {
         fetchResults();
     }, []);
 
+    // Get total votes for percentage calculation
+    const totalVotes = results.reduce((sum, candidate) => sum + candidate.votes, 0);
+
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
-            <h2 className="text-2xl font-bold">Election Results</h2>
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">📊 Election Results</h2>
+
             {loading ? (
-                <p>Loading results...</p>
+                <p className="text-lg text-gray-600 animate-pulse">Loading results...</p>
             ) : (
-                <ul className="w-96 p-4 border rounded shadow-lg">
+                <div className="bg-white text-gray-800 p-6 rounded-xl shadow-lg w-full max-w-2xl">
                     {results.length > 0 ? (
-                        results.map((candidate) => (
-                            <li key={candidate._id} className="flex justify-between py-2 border-b">
-                                <span>{candidate.name}</span>
-                                <span className="font-bold">{candidate.votes} votes</span>
-                            </li>
-                        ))
+                        <ul className="space-y-4">
+                            {results.map((candidate) => {
+                                const votePercentage = totalVotes > 0 ? (candidate.votes / totalVotes) * 100 : 0;
+                                return (
+                                    <li key={candidate._id} className="flex flex-col bg-gray-50 p-4 rounded-lg shadow-sm border hover:shadow-md transition">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-lg font-semibold">{candidate.name}</span>
+                                            <span className="font-bold text-rose-600">{candidate.votes} votes</span>
+                                        </div>
+                                        <div className="w-full bg-gray-300 rounded-full h-2.5 mt-2">
+                                            <div
+                                                className="bg-rose-500 h-2.5 rounded-full"
+                                                style={{ width: `${votePercentage}%` }}
+                                            ></div>
+                                        </div>
+                                        <p className="text-sm text-gray-500 mt-1">{votePercentage.toFixed(1)}% of total votes</p>
+                                    </li>
+                                );
+                            })}
+                        </ul>
                     ) : (
-                        <p>No results available yet.</p>
+                        <p className="text-center text-lg font-semibold text-gray-600">No results available yet.</p>
                     )}
-                </ul>
+                </div>
             )}
         </div>
     );

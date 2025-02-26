@@ -51,25 +51,38 @@ const Voting = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
-            <h2 className="text-2xl font-bold">Vote for a Candidate</h2>
-            <ul>
-                {candidates.length > 0 ? (
-                    candidates.map((candidate) => (
-                        <li key={candidate._id} className="flex justify-between w-64 p-2 border-b">
-                            <span>{candidate.name}</span>
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">🗳️ Vote for a Candidate</h2>
+
+            {candidates.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {candidates.map((candidate) => (
+                        <div
+                            key={candidate._id}
+                            className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition border w-80 text-center"
+                        >
+                            <img
+                                src={candidate.image || "/placeholder.png"}
+                                alt={candidate.name}
+                                className="h-24 rounded-full mx-auto object-cover border"
+                                onError={(e) => (e.target.src = "/placeholder.png")}
+                            />
+                            <h3 className="text-xl font-semibold mt-4">{candidate.name}</h3>
+                            <p className="text-gray-600"><strong>Party:</strong> {candidate.party}</p>
+                            {/* <p className="text-gray-600"><strong>Age:</strong> {candidate.age}</p> */}
+
                             <button
                                 onClick={() => handleVote(candidate._id)}
-                                className="bg-blue-500 text-white px-4 py-1 rounded"
+                                className="mt-4 bg-rose-500 text-white px-5 py-2 rounded-full hover:bg-rose-600 transition"
                             >
-                                Vote
+                                ✅ Vote
                             </button>
-                        </li>
-                    ))
-                ) : (
-                    <p>No candidates available</p>
-                )}
-            </ul>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p className="text-lg text-gray-600">No candidates available</p>
+            )}
         </div>
     );
 };

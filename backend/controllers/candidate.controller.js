@@ -18,13 +18,30 @@ const addCandidate = async (req, res) => {
 // @desc Get all candidates
 // @route GET /api/candidates
 // @access Public
+// const getAllCandidates = async (req, res) => {
+//     try {
+//         const candidates = await Candidate.find();
+//         res.status(200).json(candidates);
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error", error });
+//     }
+// };
+
 const getAllCandidates = async (req, res) => {
     try {
         const candidates = await Candidate.find();
-        res.status(200).json(candidates);
+        const baseURL = "http://localhost:8080/uploads/";
+
+        const candidatesWithFullImagePath = candidates.map(candidate => ({
+            ...candidate.toObject(),
+            image: candidate.image.startsWith("http") ? candidate.image : baseURL + candidate.image,
+        }));
+
+        res.status(200).json(candidatesWithFullImagePath);
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }
 };
+
 
 module.exports = { addCandidate, getAllCandidates };

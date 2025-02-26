@@ -9,51 +9,89 @@ const Login = () => {
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-        e.preventDefault(); // Prevent default form submission behavior
+        e.preventDefault();
+        setError(""); // Clear previous errors
 
         try {
             const response = await axios.post("http://localhost:8080/api/auth/login", {
                 email,
                 password,
-            });
+            }, { timeout: 5000 });
 
             const { token, voterId } = response.data;
             localStorage.setItem("token", token);
             localStorage.setItem("voterId", voterId);
 
             alert("Login successful!");
-            navigate("/voting"); // Use react-router-dom's navigate instead of window.location.href
+            navigate("/voting");
         } catch (err) {
             console.error("Login failed", err.response?.data || err);
-            setError(err.response?.data?.message || "Login failed"); // Set error state instead of alert
+            setError(err.response?.data?.message || "Login failed. Please check your credentials.");
         }
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
-            <h2 className="text-2xl font-bold">Login</h2>
-            {error && <p className="text-red-500">{error}</p>}
-            <form onSubmit={handleLogin} className="flex flex-col space-y-4">
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="border p-2 rounded"
+        <div className="flex h-screen w-full">
+            {/* Left Side (Form) */}
+            <div className="flex items-center justify-center w-full lg:w-1/2 p-8 bg-white">
+                <div className="max-w-md w-full">
+                    <h2 className="text-3xl font-bold text-gray-800 text-center">Welcome Back!</h2>
+                    <p className="text-center text-gray-600 mt-2">Sign in to continue</p>
+
+                    <form onSubmit={handleLogin} className="mt-6 space-y-4">
+                        {/* Email Input */}
+                        <div>
+                            <input
+                                type="email"
+                                className="w-full rounded-lg border border-gray-300 p-4 text-sm shadow-md 
+                                        focus:outline-none focus:ring-2 focus:ring-rose-400"
+                                placeholder="Enter email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        {/* Password Input */}
+                        <div>
+                            <input
+                                type="password"
+                                className="w-full rounded-lg border border-gray-300 p-4 text-sm shadow-md 
+                                        focus:outline-none focus:ring-2 focus:ring-rose-400"
+                                placeholder="Enter password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        {/* Error Message */}
+                        {error && (
+                            <p className="text-red-600 bg-red-100 border border-red-400 px-3 py-2 rounded-lg text-sm text-center">
+                                {error}
+                            </p>
+                        )}
+
+                        {/* Submit Button */}
+                        <button
+                            type="submit"
+                            className="w-full rounded-lg bg-rose-500 px-5 py-3 text-sm font-medium text-white 
+                                    hover:bg-rose-600 transition"
+                        >
+                            Sign in
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            {/* Right Side (Image) */}
+            <div className="hidden lg:flex w-1/2 h-full">
+                <img
+                    src="/images/login.png"
+                    alt="Login Background"
+                    className="w-full h-full object-cover"
                 />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="border p-2 rounded"
-                />
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-                    Login
-                </button>
-            </form>
+            </div>
         </div>
     );
 };
